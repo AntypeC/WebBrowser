@@ -8,10 +8,28 @@ class MainWindow(QMainWindow):
     def __init__(self, *args, **kwargs):
         super(MainWindow, self).__init__(*args, **kwargs)
 
-        self.browser = QWebEngineView()
-        self.browser.setUrl(QUrl("http://www.google.com"))
-        self.setCentralWidget(self.browser)
+        self.initUI()
+
+    def initUI(self):
+        container = QWidget # Main window
+        self.setWindowTitle("Web browser")
+        self.setGeometry(100, 60, 1000, 800)
+
+        urlLabel = QLabel(self) # Label prior to search bar
+        urlLabel.setText('URL: ')
+
+        line = QLineEdit(self) # search bar
+        line.returnPressed.connect(self.prompt_site(url=line.text))
+        line.move(50, 0)
+        line.resize(800, 32)
+
         self.show()
+
+    def prompt_site(self, url, *kwargs):
+        self.browser = QWebEngineView()
+        self.browser.setUrl(QUrl(url))
+        self.setCentralWidget(self.browser)
+
 
 app = QApplication(sys.argv)
 window = MainWindow()
